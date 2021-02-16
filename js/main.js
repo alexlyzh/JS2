@@ -7,11 +7,16 @@ const data = [
 
 const renderProduct = (title = 'Заголовок', id = Math.random(), price = Math.random().toString()) => {
     return `
-        <div class="product-item">
+        <figure class="product-item">
             <img src="https://picsum.photos/250/250?random=${id}" alt="${id}">
-            <h3>${title}</h3>
-            <p>${price}</p>
-        </div>
+            <figcaption>
+                <div>
+                    <h3>${title}</h3>
+                    <p>${price}</p>
+                </div>
+                <button class="to-cart">Добавить в корзину</button>
+            </figcaption>
+        </figure>
     `;
 };
 
