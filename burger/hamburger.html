@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Burger</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="burger.css">
+</head>
+<body>
+<header>
+    <div class="container header__wrapper">
+        <button class="btn-cart">Cart</button>
+    </div>
+</header>
+<main class="container">
+    <form action="#">
+        <h2 class="form-heading">Конструктор бургеров</h2>
+        <div class="form-wrapper">
+            <div class="sizes">
+                <p>Выберите размер бургера</p>
+                <label class="sizes__item">
+                    <input type="radio" name="size" id="big" required>
+                    <span>Давай большой! <span class="specs">100 рублей, 40 Ккал</span></span>
+                </label>
+                <label class="sizes__item">
+                    <input type="radio" name="size" id="small">
+                    <span>Давай маленький <span class="specs">50 рублей, 20 Ккал</span></span>
+                </label>
+            </div>
+            <div class="stuffings">
+                <p>Выберите начинку</p>
+                <label class="stuffings__item">
+                    <input type="radio" name="stuffing" id="cheese">
+                    <span>Давай c сыром! <span class="specs">10 рублей, 20 Ккал</span></span>
+                </label>
+                <label class="stuffings__item">
+                    <input type="radio" name="stuffing" id="salad" required>
+                    <span>Давай с салатом! <span class="specs">20 рублей, 5 Ккал</span></span>
+                </label>
+                <label class="stuffings__item">
+                    <input type="radio" name="stuffing" id="potato">
+                    <span>Давай с картохой! <span class="specs">15 рублей, 10 Ккал</span></span>
+                </label>
+            </div>
+            <div class="toppings">
+                <p>Дополнительные опции</p>
+                <label class="toppings__item">
+                    <input type="checkbox" name="topping" id="spices">
+                    <span>Посыпать приправой <span class="specs">15 рублей, 0 Ккал</span></span>
+                </label>
+                <label class="toppings__item">
+                    <input type="checkbox" name="topping" id="mayo">
+                    <span>Полить майонезом <span class="specs">20 рублей, 5 Ккал</span></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="subtotal">
+            <div>
+                <p class="price">Стоимость: </p>
+                <p class="calories">Калорийность: </p>
+            </div>
+            <input type="submit">
+        </div>
+    </form>
+</main>
+<script src="hamburger.js"></script>
+</body>
+</html>

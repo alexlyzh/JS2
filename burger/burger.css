@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    font-family: Helvetica, sans-serif;
+}
+body {
+    background: #f6f3f0;
+}
+button,
+input[type="submit"] {
+    cursor: pointer;
+    font-family: Helvetica, sans-serif;
+}
+label {
+    display: block;
+}
+.container {
+    max-width: 1170px;
+    min-width: 300px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.btn-cart {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    padding: 10px 25px;
+    border-radius: 3px;
+    background: darkorange;
+    transition: 0.2s;
+}
+.btn-cart:hover,
+input[type="submit"]:hover { background: orangered; }
+
+.btn-cart:active,
+input[type="submit"]:active { background: red; }
+
+header {
+    background: linear-gradient(to left, #ffd934 0%, coral 100%);
+    margin-bottom: 35px;
+}
+.header__wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    padding-top: 15px;
+    padding-bottom: 15px;;
+}
+
+form {
+    font-size: 22px;
+    margin: 0 auto;
+    width: 900px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 50px;
+}
+.form-heading {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 400;
+    margin-bottom: 30px;
+}
+.form-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+}
+.specs {
+    color: #b69a81;
+}
+.sizes,
+.stuffings,
+.toppings {
+    /*outline: 1px red solid;*/
+    margin-bottom: 25px;
+}
+.toppings {
+    margin-top: 30px;
+    grid-column-end: span 2;
+}
+.toppings__item {
+    display: inline;
+    margin-right: 20px;
+}
+.sizes p,
+.stuffings p,
+.toppings p {
+    margin-bottom: 15px;
+}
+.toppings p {
+    text-align: center;
+}
+.sizes__item,
+.stuffings__item,
+.toppings__item {
+    margin-bottom: 7px;
+}
+.subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.price {
+    margin-bottom: 10px;
+}
+input[type="submit"] {
+    padding: 15px;
+    border-radius: 10px;
+    background: darkorange;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    transition: 0.2s;
+}
