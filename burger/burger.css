@@ -57,7 +57,9 @@ form {
     background: #ffffff;
     border-radius: 20px;
     padding: 50px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
 }
+
 .form-heading {
     text-align: center;
     font-size: 40px;
