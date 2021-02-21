@@ -50,16 +50,23 @@ class Hamburger {
         let price = 0;
         if (this.size) {price += this.priceList.size[this.size].price}
         if (this.stuffing) {price += this.priceList.stuffing[this.stuffing].price}
+
+        for (let i = 0; i < this.toppings.length; i++) {
+            price += this.priceList.topping[this.toppings[i]].price;
+        }
         return price;
     }
     calculateCalories() {
+        let calories = 0;
+        if (this.size) {calories += this.priceList.size[this.size].calories}
+        if (this.stuffing) {calories += this.priceList.stuffing[this.stuffing].calories}
 
+        for (let i = 0; i < this.toppings.length; i++) {
+            calories += this.priceList.topping[this.toppings[i]].calories;
+        }
+        return calories;
     }
 }
-
-let burger = new Hamburger();
-console.log(burger.calculatePrice());
-console.log(burger)
 
 let sizes = document.querySelectorAll("input[name='size']");
 sizes = [...sizes];
@@ -71,18 +78,39 @@ let submit = document.querySelector("input[type='submit']");
 let price = document.querySelector('.price');
 let calories = document.querySelector('.calories');
 
-let size = '', stuffing = '';
+let size = '', stuffing = '', topping = '';
+
 sizes.forEach(elem => {
     elem.addEventListener('click', event => {
-        size = event.target.id;
-        burger.chooseSize(size);
-        price.innerText = `Стоимость: ${burger.price} рублей`
+        burger.chooseSize(event.target.id);
+        price.innerText = `Стоимость: ${burger.calculatePrice()} рублей`;
+        calories.innerText = `Калорийность: ${burger.calculateCalories()} Ккал`;
     });
 });
+
 stuffings.forEach(elem => {
     elem.addEventListener('click', event => {
-        stuffing = event.target.id;
+        burger.choseStuffing(event.target.id)
+        price.innerText = `Стоимость: ${burger.calculatePrice()} рублей`;
+        calories.innerText = `Калорийность: ${burger.calculateCalories()} Ккал`;
+    });
+});
+
+toppings.forEach(elem => {
+    elem.addEventListener('click', event => {
+        if (event.target.checked) {
+            burger.addTopping(event.target.id);
+            price.innerText = `Стоимость: ${burger.calculatePrice()} рублей`;
+            calories.innerText = `Калорийность: ${burger.calculateCalories()} Ккал`;
+        } else {
+            burger.removeTopping(event.target.id);
+            price.innerText = `Стоимость: ${burger.calculatePrice()} рублей`;
+            calories.innerText = `Калорийность: ${burger.calculateCalories()} Ккал`;
+        }
 
     });
 });
 
+let burger = new Hamburger();
+price.innerText = `Стоимость: ${burger.calculatePrice()} рублей`;
+calories.innerText = `Калорийность: ${burger.calculateCalories()} Ккал`;
