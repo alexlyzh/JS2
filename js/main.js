@@ -1,38 +1,55 @@
+const API = `https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses`;
+
+let getRequest = (url) => {
+    return new Promise(function (resolve, reject){
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== 4) {
+                reject(xhr.readyState)
+            }
+            if (xhr.status !== 200) {
+                reject(console.log(`Some error: ${xhr.status} - ${xhr.statusText}`));
+            }
+            if (xhr.status === 200 && xhr.readyState === 4) {
+                resolve(xhr.responseText);
+            }
+        }
+    })
+}
+
 class Products {
-    data = [];
     products = [];
     container = null;
 
     constructor(selector) {
         this.container = document.querySelector(selector);
-        this._fetchData();
-        this._render();
+        this._fetchData()
+            .then(() => this._render());
+    }
+
+    calcSum() {
+        return this.products.reduce((accum, item) => accum + item.price, 0);
     }
 
     _fetchData() {
-        this.data = [
-            { title: 'Notebook', id: 1, price: 2000 },
-            { title: 'Keyboard', id: 2, price: 200 },
-            { title: 'Mouse', id: 3, price: 100 },
-            { title: 'Gamepad', id: 4, price: 87 }
-        ];
+        return fetch(`${API}/catalogData.json`)
+            .then(result => result.json())
+            .then(data => {
+                for (let product of data) {
+                    this.products.push(new ProductItem(product));
+                }
+            });
     }
 
     _render() {
-        for (let data of this.data) {
-            const product = new ProductItem(data);
-            this.products.push(product);
-            this.container.insertAdjacentHTML('beforeend', product.render())
-        }
-    }
+        for (let product of this.products) {
+            if (product.rendered) {
+                continue;
+            }
 
-    // 2. Добавьте для Products метод, определяющий суммарную стоимость всех товаров.
-    getFullPrice() {
-        let fullPrice = 0;
-        this.data.forEach(item => {
-            fullPrice += item.price;
-        });
-        return fullPrice;
+            this.container.insertAdjacentHTML('beforeend', product.render());
+        }
     }
 }
 
@@ -41,52 +58,99 @@ class ProductItem {
     price = 0;
     id = 0;
     img = '';
+    rendered = false;
 
     constructor(product, img = 'https://picsum.photos/300/300?random=') {
-        ({ title: this.title, price: this.price, id: this.id } = product);
+        ({ product_name: this.title, price: this.price, id_product: this.id } = product);
         this.img = img;
     }
 
     render() {
+        this.rendered = true;
         return `
-        <figure class="product-item">
+        <div class="product-item">
             <img src="${this.img}${this.id}" alt="${this.id}">
-            <figcaption>
+            <div class="caption">
                 <div>
                     <h3>${this.title}</h3>
                     <p>${this.price}</p>
                 </div>
-                <button class="to-cart">Добавить в корзину</button>
-            </figcaption>
-        </figure>`
+                <button class="to-cart" data-id="${this.id}">Добавить в корзину</button>
+            </div>
+        </div>`
     }
 }
 
-// 1. Добавьте пустые классы для корзины товаров и элемента корзины товаров. Продумайте, какие методы понадобятся для работы с этими сущностями.
+class GeneralProduct {
+    constructor(product) {
+        ({ product_name: this.title, price: this.price, id_product: this.id } = product);
+    }
+}
+
 class Cart {
     // products = [ - массив с добавленными продуктами
     //     {CartItem}, - продукты
-    //     {CartItem},
     //     ...
     // ]
-    //
 
-    // applyPromo() - принимает промокод, делает скидку 15% на всё
-    // getCartPrice() - возвращает полную стоимость корзины
-    // placeOrder() - принимает заказ и отправляет на страницу оплаты
+    products = [];
+    container = null;
+
+    constructor(selector) {
+        this.container = document.querySelector(selector);
+    }
+
+    _fetchData() {
+        return fetch(`${API}/catalogData.json`)
+            .then(result => result.json())
+            .then(data => {
+                for (let product of data) {
+                    this.products.push(new GeneralProduct(product));
+                }
+            });
+    }
+
+    // render() {} - отрендерить верстку корзины и ее элементов
+
+    addToCart(id) {
+        this.products.push(new CartItem(id));
+    }
+    // show() - показать корзину
+    // hide()
+    // incrQuantity() - увеличивает количество продукта на 1 шт
+    // decrQuantity() - уменьшает количество продукта на 1 шт
+    // deleteSKU() - обнуляет количество продукта
+    // get price() - считает цену всей корзины
 }
 
 class CartItem {
-    // title - название
-    // price - цена
-    // quantity - количество
-    // discountPrice - цена после скидки
+    title = '';
+    price = 0;
+    id = 0;
+    rendered = false;
 
-    // incrQuantity() - увеличивает количество на 1 шт
-    // decrQuantity() - уменьшает количество на 1 шт
-    // getPrice() - считает стоимость выбранного количества товаров
-    // deleteProduct() - удаляет продукт из корзины
-    // getDiscount() - делает скидку на продукт,
+    constructor(id) {
+        ({ product_name: this.title, price: this.price, id_product: this.id } = product);
+    }
+
+
+
+    render() {
+        this.rendered = true;
+        return `
+        <div class="cart__item">
+            <div>
+                <h4 class="title">${this.title}</h4>
+                <p class="price">${this.price}</p>
+            </div>
+            <div>
+                <p class="quantity">1</p>
+                <button class="increase">+</button>
+                <button class="decrease">-</button>
+            </div>
+        </div>`
+    }
 }
 
 const list = new Products('.products');
+const cart = new Cart('.cart');
