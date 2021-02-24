@@ -136,12 +136,12 @@ class Cart {
     }
 
     switchVisibility () {
-        if (cart.isVisible === false) {
-            cart.container.style.visibility = 'visible';
-            cart.isVisible = true;
+        if (this.isVisible === false) {
+            this.container.style.visibility = 'visible';
+            this.isVisible = true;
         } else {
-            cart.container.style.visibility = 'hidden';
-            cart.isVisible = false;
+            this.container.style.visibility = 'hidden';
+            this.isVisible = false;
         }
     }
 
