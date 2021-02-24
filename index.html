@@ -5,16 +5,23 @@
     <title>Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/f64db6ab7d.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
         <div class="container header__wrapper">
-            <button class="btn-cart">Cart</button>
+            <button class="btn-cart" onclick="cart.switchVisibility()">Cart</button>
         </div>
     </header>
     <main>
         <div class="products container"></div>
-        <div class="cart"></div>
+        <div class="cart" style="visibility: hidden">
+            <div class="cart__header">
+                <button onclick="cart.switchVisibility()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
     </main>
     <script src="js/main.js"></script>
 </body>

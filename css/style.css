@@ -4,6 +4,7 @@
     border: 0;
     outline: none;
     font-family: Helvetica, sans-serif;
+    box-sizing: border-box;
 }
 body {
     background: #f6f3f0;
@@ -88,28 +89,66 @@ img {
 }
 
 .cart {
-    /*visibility: hidden;*/
     border-left: 1px solid rgba(0,0,0,.15);
     position: absolute;
-    top: 71px; bottom: 0; right: 0;
-    width: 29rem;
+    top: 0; bottom: 0; right: 0;
+    width: 31rem;
     background: #ffffff;
     padding: 15px;
 }
-.cart__item {
+.cart__header {
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+}
+.cart__header button i {
+    font-size: 30px;
+    background: #ffffff;
+    padding: 10px;
+}
+.cart__item {
+    text-align: center;
     padding: 10px;
     border-bottom: 1px solid rgba(0,0,0,.15);
 }
-.cart__item > div{
-    outline: 1px red solid;
+.cart__item-title {
+    margin-bottom: 10px;
+    font-size: 1.6rem;
+}
+.title {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto 5px;
+    max-width: 150px;
+}
+.cart__item-settings {
+    display: flex;
+    justify-content: center;
+}
+.cart__item-settings button {
+    border: 1px rgba(0,0,0,.15) solid;
+    background: #ffffff;
+    width: 30px;
+    padding: 5px 0;
+}
+.cart__item-settings .quantity {
+    width: 30px;
+    padding: 5px 0;
+    font-size: 1.1rem;
+    border-top: 1px rgba(0,0,0,.15) solid;
+    border-bottom: 1px rgba(0,0,0,.15) solid;
 }
 .cart__item h4 {
     color: #0072ff;
 }
-.cart__item button {
-    padding: 5px 10px;
+.removeBtn {
+    color: #0072ff;
+    background: #deebff;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    margin-left: 10px;
 }
 
 @media (max-width: 1100px) {

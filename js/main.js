@@ -6,7 +6,7 @@ let getRequest = (url) => {
         xhr.open('GET', url, true);
         xhr.onreadystatechange = () => {
             if (xhr.readyState !== 4) {
-                reject(xhr.readyState)
+                return;
             }
             if (xhr.status !== 200) {
                 reject(console.log(`Some error: ${xhr.status} - ${xhr.statusText}`));
@@ -21,11 +21,20 @@ let getRequest = (url) => {
 class Products {
     products = [];
     container = null;
-
     constructor(selector) {
         this.container = document.querySelector(selector);
         this._fetchData()
-            .then(() => this._render());
+            .then(() => this._render())
+            .then(() => {
+                document.querySelectorAll('.to-cart').forEach(button => {
+                    button.addEventListener('click', event => {
+                        let id = event.target.getAttribute('data-id');
+                        let title = event.target.getAttribute('data-title');
+                        let price = event.target.getAttribute('data-price');
+                        cart.add(id, title, price);
+                    });
+                });
+            });
     }
 
     calcSum() {
@@ -47,7 +56,6 @@ class Products {
             if (product.rendered) {
                 continue;
             }
-
             this.container.insertAdjacentHTML('beforeend', product.render());
         }
     }
@@ -75,52 +83,71 @@ class ProductItem {
                     <h3>${this.title}</h3>
                     <p>${this.price}</p>
                 </div>
-                <button class="to-cart" data-id="${this.id}">Добавить в корзину</button>
+                <button class="to-cart" data-id="${this.id}" data-title="${this.title}" data-price="${this.price}">Добавить в корзину</button>
             </div>
         </div>`
     }
 }
 
-class GeneralProduct {
-    constructor(product) {
-        ({ product_name: this.title, price: this.price, id_product: this.id } = product);
-    }
-}
-
 class Cart {
-    // products = [ - массив с добавленными продуктами
-    //     {CartItem}, - продукты
-    //     ...
-    // ]
-
-    products = [];
+    products = []; // содержит объекты: { instance: {CartItem}, quantity: number }
     container = null;
+    isVisible = false;
 
     constructor(selector) {
         this.container = document.querySelector(selector);
+        this.render();
     }
 
-    _fetchData() {
-        return fetch(`${API}/catalogData.json`)
-            .then(result => result.json())
-            .then(data => {
-                for (let product of data) {
-                    this.products.push(new GeneralProduct(product));
+    render () {
+        for (let product of this.products) {
+            if (product.instance.rendered) {
+                continue;
+            }
+            this.container.insertAdjacentHTML('beforeend', product.instance.render());
+        }
+    }
+
+    add (id, title, price) {
+        if (!this.products.some(product => product.instance.id === id)) {
+            this.products.push({
+                instance: new CartItem(id, title, price),
+                quantity: 1,
+            });
+            this.render();
+        } else {
+            this.products.forEach(product => {
+                if (product.instance.id === id) {
+                    document.querySelector(`p[data-id="${id}"]`).innerText = ++product.quantity;
                 }
             });
+        }
+    }
+    remove (id) {
+        id = id.toString();
+        for (let i = 0; i < this.products.length; i++) { // {instance: {CartItem}, quantity: number}
+            if (this.products[i].instance.id === id) {
+                this.products.splice(i, 1);
+            }
+        }
+
+        let node = document.querySelector(`div[id="${id}"]`);
+        node.parentNode.removeChild(node);
     }
 
-    // render() {} - отрендерить верстку корзины и ее элементов
-
-    addToCart(id) {
-        this.products.push(new CartItem(id));
+    switchVisibility () {
+        if (cart.isVisible === false) {
+            cart.container.style.visibility = 'visible';
+            cart.isVisible = true;
+        } else {
+            cart.container.style.visibility = 'hidden';
+            cart.isVisible = false;
+        }
     }
-    // show() - показать корзину
-    // hide()
-    // incrQuantity() - увеличивает количество продукта на 1 шт
-    // decrQuantity() - уменьшает количество продукта на 1 шт
-    // deleteSKU() - обнуляет количество продукта
-    // get price() - считает цену всей корзины
+
+    // incrQuantity () - увеличивает количество продукта на 1 шт
+    // decrQuantity () - уменьшает количество продукта на 1 шт
+    // get price () - считает цену всей корзины
 }
 
 class CartItem {
@@ -129,28 +156,36 @@ class CartItem {
     id = 0;
     rendered = false;
 
-    constructor(id) {
-        ({ product_name: this.title, price: this.price, id_product: this.id } = product);
+    constructor(id, title, price) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
     }
-
-
 
     render() {
         this.rendered = true;
         return `
-        <div class="cart__item">
-            <div>
-                <h4 class="title">${this.title}</h4>
+        <div id="${this.id}" class="cart__item">
+            <div class="cart__item-title">
+                <div class="title">
+                    <h4>${this.title}</h4>
+                    <button class="removeBtn" onclick="cart.remove(${this.id})">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
                 <p class="price">${this.price}</p>
             </div>
-            <div>
-                <p class="quantity">1</p>
-                <button class="increase">+</button>
+            <div class="cart__item-settings">
                 <button class="decrease">-</button>
+                <p class="quantity" data-id="${this.id}">1</p>
+                <button class="increase">+</button>
             </div>
         </div>`
     }
 }
 
 const list = new Products('.products');
-const cart = new Cart('.cart');
+const cart = new Cart('.cart')
+
+
+
