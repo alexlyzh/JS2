@@ -3,8 +3,13 @@
     padding: 0;
     border: 0;
     outline: none;
+    font-family: Helvetica, sans-serif;
+    box-sizing: border-box;
 }
-
+body {
+    background: #f6f3f0;
+}
+button { cursor: pointer }
 .container {
     max-width: 1140px;
     min-width: 300px;
@@ -49,12 +54,21 @@ header {
 img {
     width: 100%;
 }
-figure:hover {
-    -moz-box-shadow: 0 0 5px;
-    -webkit-box-shadow: 0 0 5px;
-    box-shadow:0 0 5px;
+.product-item {
+    overflow: hidden;
+    border: 1px darkgrey solid;
+    border-radius: 15px;
+    transition: transform 0.3s;
+    cursor: pointer;
+    background: #ffffff;
 }
-.product-item figcaption {
+.product-item:hover {
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, .30);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .30);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .30);
+    transform: scale(1.02);
+}
+.product-item .caption {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -72,6 +86,69 @@ figure:hover {
     color: #fff;
     border: none;
     background: rgb(64,199,129);
+}
+
+.cart {
+    border-left: 1px solid rgba(0,0,0,.15);
+    position: absolute;
+    top: 0; bottom: 0; right: 0;
+    width: 31rem;
+    background: #ffffff;
+    padding: 15px;
+}
+.cart__header {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+}
+.cart__header button i {
+    font-size: 30px;
+    background: #ffffff;
+    padding: 10px;
+}
+.cart__item {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0,0,0,.15);
+}
+.cart__item-title {
+    margin-bottom: 10px;
+    font-size: 1.6rem;
+}
+.title {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto 5px;
+    max-width: 150px;
+}
+.cart__item-settings {
+    display: flex;
+    justify-content: center;
+}
+.cart__item-settings button {
+    border: 1px rgba(0,0,0,.15) solid;
+    background: #ffffff;
+    width: 30px;
+    padding: 5px 0;
+}
+.cart__item-settings .quantity {
+    width: 30px;
+    padding: 5px 0;
+    font-size: 1.1rem;
+    border-top: 1px rgba(0,0,0,.15) solid;
+    border-bottom: 1px rgba(0,0,0,.15) solid;
+}
+.cart__item h4 {
+    color: #0072ff;
+}
+.removeBtn {
+    color: #0072ff;
+    background: #deebff;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    margin-left: 10px;
 }
 
 @media (max-width: 1100px) {
