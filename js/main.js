@@ -1,22 +1,22 @@
 const API = `https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses`;
 
-let getRequest = (url) => {
-    return new Promise(function (resolve, reject){
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState !== 4) {
-                return;
-            }
-            if (xhr.status !== 200) {
-                reject(console.log(`Some error: ${xhr.status} - ${xhr.statusText}`));
-            }
-            if (xhr.status === 200 && xhr.readyState === 4) {
-                resolve(xhr.responseText);
-            }
-        }
-    })
-}
+// let getRequest = (url) => {
+//     return new Promise(function (resolve, reject){
+//         let xhr = new XMLHttpRequest();
+//         xhr.open('GET', url, true);
+//         xhr.onreadystatechange = () => {
+//             if (xhr.readyState !== 4) {
+//                 return;
+//             }
+//             if (xhr.status !== 200) {
+//                 reject(console.log(`Some error: ${xhr.status} - ${xhr.statusText}`));
+//             }
+//             if (xhr.status === 200 && xhr.readyState === 4) {
+//                 resolve(xhr.responseText);
+//             }
+//         }
+//     })
+// }
 
 class Products {
     products = [];
@@ -137,10 +137,10 @@ class Cart {
 
     switchVisibility () {
         if (this.isVisible === false) {
-            this.container.style.visibility = 'visible';
+            this.container.classList.toggle('visible');
             this.isVisible = true;
         } else {
-            this.container.style.visibility = 'hidden';
+            this.container.classList.toggle('visible');
             this.isVisible = false;
         }
     }
@@ -184,8 +184,65 @@ class CartItem {
     }
 }
 
+class FeedbackForm {
+    constructor(selector) {
+        this.container = document.querySelector(selector);
+        this._render();
+        this._init();
+        this.name = document.querySelector('input[type="text"]');
+        this.phone = document.querySelector('input[type="tel"]');
+        this.email = document.querySelector('input[type="email"]');
+    }
+    _render() {
+        let markup = `
+             <div class="feedback">
+                <label> Ваше имя:
+                    <input type="text" placeholder="Имя из букв" class="feedback__item">
+                </label>
+                <label> Телефон:
+                    <input type="tel" placeholder="+7(000)000-0000" class="feedback__item">
+                </label>
+                <label> Почта:
+                    <input type="email" placeholder="email@domain.com" class="feedback__item">
+                </label>
+                <p>Отзыв:</p>
+                <textarea name="feed" id="69"></textarea>
+                <input type="submit" class="feedback__submit" value="Отправить">
+            </div>`;
+        this.container.insertAdjacentHTML('beforeend', markup);
+    };
+    _init() {
+        this.container.addEventListener('submit', event => {
+           if ( !/[A-Za-zА-Яа-яё ]+/i.test(this.name.value) ) {
+               event.preventDefault();
+               this.name.classList.add('feedback__item_error');
+               // alert('В имени - только буквы!');
+           } else {
+               this.name.classList.remove('feedback__item_error')
+           }
+
+            if ( !/\+7\(\d{3}\)\d{3}-\d{4}/i.test(this.phone.value) ) {
+                event.preventDefault();
+                this.phone.classList.add('feedback__item_error');
+                // alert('Формат номера телефона +7(000)000-0000');
+            } else {
+                this.phone.classList.remove('feedback__item_error')
+            }
+
+            if ( !/^[a-z]+[-.]?[a-z]+@[a-z]+\.[a-z]+/i.test(this.email.value) ) { // /.+@.+\..+/i
+                event.preventDefault();
+                this.email.classList.add('feedback__item_error');
+                // alert('Формат mymail@mail.ru, или my.mail@mail.ru, или my-mail@mail.ru');
+            } else {
+                this.email.classList.remove('feedback__item_error')
+            }
+        });
+    }
+}
+
 const list = new Products('.products');
 const cart = new Cart('.cart')
+const feedbackForm = new FeedbackForm('form');
 
 
 
