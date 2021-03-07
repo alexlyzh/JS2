@@ -5,7 +5,7 @@
     <title>Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
-    <script defer src="js/main.js"></script>
+    <script defer src="js/main.js" type="module"></script>
     <script src="https://unpkg.com/vue@next"></script>
 </head>
 <body>
@@ -13,16 +13,12 @@
         <header>
             <div class="container header__wrapper">
                 <button class="btn-cart" @click="cartVisible = !cartVisible">Cart</button>
-                <form action="#" class="search-form" @submit.prevent>
-                    <input type="text" class="search-field" v-model.lazy="searchLine">
-                    <button class="btn-search" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
+                <search ref="refSearch"></search>
             </div>
         </header>
         <main>
             <div class="products container">
+                <error ref="error"></error>
                 <div class="product-item" v-for="el of filtered" :key="el.id_product">
                    <img :src="imgCatalog+el.id_product" alt="el.product_name">
                     <div class="caption">
@@ -42,7 +38,7 @@
                     <div class="cart__total-price">{{ getTotalCartPrice }}</div>
                 </div>
                 <p v-if="!cartItems.length" class="cart__empty">Пустая корзина</p>
-                <div id="${this.id}" class="cart__item" v-for="el of cartItems" :key="el.id_product">
+                <div class="cart__item" v-for="el of cartItems" :key="el.id_product">
                     <div class="cart__item-title">
                         <div class="title">
                             <h4>{{ el.product_name }}</h4>

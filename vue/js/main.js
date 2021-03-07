@@ -1,4 +1,11 @@
+import {Search} from "./search.js";
+import {Error} from "./error.js";
+
 const App = {
+    components: {
+        Search,
+        Error,
+    },
     data() {
         return {
             API: `https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses`,
@@ -6,13 +13,19 @@ const App = {
             products: [],
             cartItems: [],
             imgCatalog: 'https://picsum.photos/300/300?random=',
-            searchLine: '',
             cartVisible: false,
+        }
+    },
+    provide() {
+        return {
+            API: this.API,
+            getJson: this.getJson,
         }
     },
     computed: {
         filtered () {
-            let regexp = new RegExp(this.searchLine, 'i');
+            let regexp = new RegExp(this.$refs.refSearch.userSearch, 'i');
+            //let regexp = new RegExp('', 'i');
             return this.products.filter(product => regexp.test(product.product_name));
         },
         getTotalCartPrice () {
@@ -29,7 +42,7 @@ const App = {
         getJson(url) {
             return fetch(url)
                 .then(result => result.json())
-                .catch(e => console.log(e));
+                .catch(e => this.$refs.error.setText(e));
         },
         addProduct(product) {
             this.getJson(`${this.API}/addToBasket.json`)
@@ -82,6 +95,7 @@ const App = {
                     this.products.push(el);
                 }
             });
+        console.log(this)
     }
 };
 
