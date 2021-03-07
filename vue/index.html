@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="js/main.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="container header__wrapper">
+                <button class="btn-cart" @click="cartVisible = !cartVisible">Cart</button>
+                <form action="#" class="search-form" @submit.prevent>
+                    <input type="text" class="search-field" v-model.lazy="searchLine">
+                    <button class="btn-search" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </header>
+        <main>
+            <div class="products container">
+                <div class="product-item" v-for="el of filtered" :key="el.id_product">
+                   <img :src="imgCatalog+el.id_product" alt="el.product_name">
+                    <div class="caption">
+                        <div>
+                            <h3>{{ el.product_name }}</h3>
+                            <p>{{ el.price }}</p>
+                        </div>
+                        <button class="to-cart" @click="addProduct(el)">Добавить в корзину</button>
+                    </div>
+                </div>
+            </div>
+            <div class="cart" v-show="cartVisible">
+                <div class="cart__header">
+                    <button @click="cartVisible = !cartVisible">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                    <div class="cart__total-price">{{ getTotalCartPrice }}</div>
+                </div>
+                <p v-if="!cartItems.length" class="cart__empty">Пустая корзина</p>
+                <div id="${this.id}" class="cart__item" v-for="el of cartItems" :key="el.id_product">
+                    <div class="cart__item-title">
+                        <div class="title">
+                            <h4>{{ el.product_name }}</h4>
+                            <button class="removeBtn" @click="removeProduct(el)">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <p class="price">
+                            <span v-show="!el.quantity">{{ el.price }}</span>
+                            <span v-show="el.quantity >= 1">{{ el.price * el.quantity }}</span>
+                        </p>
+                    </div>
+                    <div class="cart__item-settings">
+                        <button class="decrease" @click="decrQuantity(el)">-</button>
+                        <p class="quantity">{{ el.quantity }}</p>
+                        <button class="increase" @click="incrQuantity(el)">+</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="https://kit.fontawesome.com/f64db6ab7d.js" crossorigin="anonymous"></script>
+</body>
+</html>
